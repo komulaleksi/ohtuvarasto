@@ -19,8 +19,9 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
       - name: Install dependencies
-        run: poetry install
-             poetry add pylint
+        run: |
+          poetry install
+          poetry add pylint
       - name: Run tests
         run: poetry run coverage run --branch -m pytest
       - name: Coverage report
@@ -30,4 +31,4 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Run pylint
-        run: pylint src
+        run: poetry run pylint src
