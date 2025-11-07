@@ -10,13 +10,33 @@ class TestVarasto(unittest.TestCase):
         # https://docs.python.org/3/library/unittest.html#unittest.TestCase.assertAlmostEqual
         self.assertAlmostEqual(self.varasto.saldo, 0)
 
+    def test_varaston_tilavuus_ei_negatiivinen(self):
+        varasto = Varasto(-10)
+        self.assertAlmostEqual(varasto.tilavuus, 0)
+
     def test_uudella_varastolla_oikea_tilavuus(self):
         self.assertAlmostEqual(self.varasto.tilavuus, 10)
+
+    def test_varaston_saldo_ei_negatiivinen(self):
+        varasto = Varasto(10, -5)
+        self.assertAlmostEqual(varasto.saldo, 0)
+
+    def test_varaston_saldo_ei_ylita_tilavuutta(self):
+        varasto = Varasto(10, 15)
+        self.assertAlmostEqual(varasto.saldo, 10)
 
     def test_lisays_lisaa_saldoa(self):
         self.varasto.lisaa_varastoon(8)
 
         self.assertAlmostEqual(self.varasto.saldo, 8)
+
+    def test_negatiivinen_lisays_ei_muuta_saldoa(self):
+        self.varasto.lisaa_varastoon(-10)
+        self.assertAlmostEqual(self.varasto.saldo, 0)
+
+    def test_lisays_ei_ylita_tilavuutta(self):
+        self.varasto.lisaa_varastoon(15)
+        self.assertAlmostEqual(self.varasto.saldo, 10)
 
     def test_lisays_lisaa_pienentaa_vapaata_tilaa(self):
         self.varasto.lisaa_varastoon(8)
@@ -31,6 +51,12 @@ class TestVarasto(unittest.TestCase):
 
         self.assertAlmostEqual(saatu_maara, 2)
 
+    def test_negatiivinen_ottaminen_ei_onnistu(self):
+        self.assertAlmostEqual(self.varasto.ota_varastosta(-10), 0.0)
+
+    def test_tilavuutta_suurempi_ottaminen_ottaa_koko_varaston(self):
+        self.assertAlmostEqual(self.varasto.ota_varastosta(15), 0.0)
+
     def test_ottaminen_lisaa_tilaa(self):
         self.varasto.lisaa_varastoon(8)
 
@@ -38,3 +64,6 @@ class TestVarasto(unittest.TestCase):
 
         # varastossa pitäisi olla tilaa 10 - 8 + 2 eli 4
         self.assertAlmostEqual(self.varasto.paljonko_mahtuu(), 4)
+
+    def test_palautus_muotoiltu_oikein(self):
+        self.assertAlmostEqual(str(self.varasto), f"saldo = {self.varasto.saldo}, vielä tilaa {self.varasto.paljonko_mahtuu()}")
