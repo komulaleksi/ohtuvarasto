@@ -20,12 +20,13 @@ jobs:
         run: poetry install
       - name: Install Coverage
         run: poetry add coverage
+      - name: Run tests
+        run: poetry run coverage run --branch -m pytest
       - name: Coverage report
         run: poetry run coverage xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Run tests
-        run: poetry run coverage run --branch -m pytest
+          
         
