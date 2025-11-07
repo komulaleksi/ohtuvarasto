@@ -21,7 +21,7 @@ jobs:
       - name: Install Coverage
         run: poetry add coverage
       - name: Coverage report
-        run: poetry run coverage xml
+        run: pytest --cov --cov-branch --cov-report=xml
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
         with:
